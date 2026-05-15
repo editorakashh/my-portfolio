@@ -73,27 +73,73 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // 3. Scroll Reveal Animations using Intersection Observer
-    const sections = document.querySelectorAll('.fade-in-section');
-    
-    const observerOptions = {
-        root: null,
-        threshold: 0.15,
-        rootMargin: "0px 0px -50px 0px"
-    };
+    // 3. Removed Lenis
 
-    const sectionObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                // Optional: unobserve after revealing
-                // observer.unobserve(entry.target);
-            }
+    // 4. GSAP Animations
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Hero Reveal
+    gsap.from(".greeting, .glitch-text, .role, .hero-desc, .cta-group", {
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.15,
+        ease: "power3.out",
+        delay: 0.2
+    });
+
+    gsap.from(".hero-visual", {
+        scale: 0.8,
+        opacity: 0,
+        duration: 1.5,
+        ease: "power3.out",
+        delay: 0.5
+    });
+
+    // Section Reveals
+    const animateSections = document.querySelectorAll('section:not(#home)');
+    animateSections.forEach((section) => {
+        const elements = section.querySelectorAll('.section-header, .about-text, .about-image-placeholder, .project-card, .contact-container');
+        if (elements.length > 0) {
+            gsap.from(elements, {
+                scrollTrigger: {
+                    trigger: section,
+                    start: "top 85%", // trigger slightly earlier
+                },
+                y: 50,
+                opacity: 0,
+                duration: 0.8,
+                stagger: 0.15,
+                ease: "power3.out",
+                clearProps: "all" // Clears inline styles after animation to prevent layout bugs
+            });
+        }
+    });
+
+    // Magnetic Buttons
+    const magneticElements = document.querySelectorAll('.btn');
+    magneticElements.forEach((el) => {
+        el.addEventListener('mousemove', (e) => {
+            const position = el.getBoundingClientRect();
+            const x = e.clientX - position.left - position.width / 2;
+            const y = e.clientY - position.top - position.height / 2;
+            
+            gsap.to(el, {
+                x: x * 0.3,
+                y: y * 0.3,
+                duration: 0.3,
+                ease: "power2.out"
+            });
         });
-    }, observerOptions);
 
-    sections.forEach(section => {
-        sectionObserver.observe(section);
+        el.addEventListener('mouseleave', () => {
+            gsap.to(el, {
+                x: 0,
+                y: 0,
+                duration: 0.5,
+                ease: "elastic.out(1, 0.3)"
+            });
+        });
     });
 
     // 4. Active Navigation Link Highlighting on Scroll

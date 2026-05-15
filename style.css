@@ -6,7 +6,7 @@
     --accent-color: #3b82f6;
     --accent-glow: rgba(59, 130, 246, 0.4);
     --gradient-primary: linear-gradient(135deg, #3b82f6, #8b5cf6);
-    --font-main: 'Inter', sans-serif;
+    --font-main: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     --transition-fast: all 0.2s ease;
     --transition-smooth: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     --border-radius: 12px;
@@ -29,6 +29,16 @@ html {
 body {
     line-height: 1.6;
     overflow-x: hidden;
+}
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 /* Custom Cursor */
