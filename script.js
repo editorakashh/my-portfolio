@@ -110,8 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 opacity: 0,
                 duration: 0.8,
                 stagger: 0.15,
-                ease: "power3.out",
-                clearProps: "all" // Clears inline styles after animation to prevent layout bugs
+                ease: "power3.out"
             });
         }
     });
