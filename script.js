@@ -2,24 +2,44 @@ document.addEventListener('DOMContentLoaded', () => {
     // 1. Custom Cursor
     const cursor = document.getElementById('cursor-glow');
     
-    document.addEventListener('mousemove', (e) => {
-        cursor.style.left = e.clientX + 'px';
-        cursor.style.top = e.clientY + 'px';
+    const moveCursor = (e) => {
+        const x = e.clientX || (e.touches && e.touches[0].clientX);
+        const y = e.clientY || (e.touches && e.touches[0].clientY);
+        if (x !== undefined && y !== undefined) {
+            cursor.style.left = x + 'px';
+            cursor.style.top = y + 'px';
+        }
+    };
+
+    document.addEventListener('mousemove', moveCursor);
+    document.addEventListener('touchmove', moveCursor, { passive: true });
+    document.addEventListener('touchstart', (e) => {
+        cursor.style.opacity = '1';
+        moveCursor(e);
+    }, { passive: true });
+    document.addEventListener('touchend', () => {
+        // Optional: keep it visible or fade out
+        // cursor.style.opacity = '0';
     });
 
     // Expand cursor on clickable elements
     const clickables = document.querySelectorAll('a, button, input, textarea');
     clickables.forEach(el => {
-        el.addEventListener('mouseenter', () => {
+        const expandCursor = () => {
             cursor.style.width = '600px';
             cursor.style.height = '600px';
             cursor.style.background = 'radial-gradient(circle, var(--accent-glow) 0%, transparent 60%)';
-        });
-        el.addEventListener('mouseleave', () => {
+        };
+        const shrinkCursor = () => {
             cursor.style.width = '400px';
             cursor.style.height = '400px';
             cursor.style.background = 'radial-gradient(circle, var(--accent-glow) 0%, transparent 70%)';
-        });
+        };
+
+        el.addEventListener('mouseenter', expandCursor);
+        el.addEventListener('mouseleave', shrinkCursor);
+        el.addEventListener('touchstart', expandCursor, { passive: true });
+        el.addEventListener('touchend', shrinkCursor, { passive: true });
     });
 
     // 2. Mobile Navigation Toggle
